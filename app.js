@@ -1,8 +1,11 @@
 import express from 'express';
+import router from './router/index.js';
 
 const app = express();
 const PORT = process.env.port || 3000;
-console.log('app', PORT);
+
+// Add routing
+app.use(router);
 
 // Start Server
 async function start() {
