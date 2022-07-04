@@ -8,18 +8,21 @@ const PORT = process.env.port || 3000;
 app.use(router);
 
 // Start Server
-async function start() {
-  try {
-    app.listen(PORT, () => {
-      console.log(`Server started on port ${PORT}`);
-    });
-  } catch (e) {
-    console.log({ message: e.message });
-  }
-}
+// async function start() {
+//   try {
+//     app.listen(PORT, () => {
+//       console.log(`Server started on port ${PORT}`);
+//     });
+//   } catch (e) {
+//     console.log({ message: e.message });
+//   }
+// }
 
-if (process.env.NODE_ENV === 'development') {
-  start();
-}
+// if (process.env.NODE_ENV === 'development') {
+//   start();
+// }
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+});
 
 export { app };
