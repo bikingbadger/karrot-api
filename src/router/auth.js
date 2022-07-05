@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import User from '../model/User.js';
 import { registerValidation, loginValidation } from '../utils/validation.js';
+import { hashValue } from '../utils/encryption.js';
+
 const authRouter = Router();
 
 authRouter.post('/register', async (req, res) => {
@@ -12,7 +14,7 @@ authRouter.post('/register', async (req, res) => {
   const user = new User({
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password,
+    password: await hashValue(req.body.password),
   });
 
   // Check user doesn't exist in DB
@@ -23,7 +25,7 @@ authRouter.post('/register', async (req, res) => {
   // Save the user
   try {
     const savedUser = await user.save();
-    res.status(200).json(savedUser);
+    res.status(200).json({id: savedUser._id});
   } catch (error) {
     res.status(400).send(error);
   }
