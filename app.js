@@ -1,26 +1,23 @@
+import 'dotenv/config.js';
+
 import express from 'express';
-import router from './router/index.js';
+import bodyParser from 'body-parser';
+import router from './src/router/index.js';
+import { dbConnection } from './src/utils/db.js';
 
 const app = express();
-const PORT = process.env.port || 3000;
+const PORT = process.env.port || 3030;
+
+// Middleware
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
 
 // Add routing
-app.use(router);
+app.use('/api', router);
 
-// Start Server
-// async function start() {
-//   try {
-//     app.listen(PORT, () => {
-//       console.log(`Server started on port ${PORT}`);
-//     });
-//   } catch (e) {
-//     console.log({ message: e.message });
-//   }
-// }
-
-// if (process.env.NODE_ENV === 'development') {
-//   start();
-// }
+// Start app
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
