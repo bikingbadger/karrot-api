@@ -23,6 +23,16 @@ kidRouter.post('/create', async (req, res) => {
     parentId: req.body.parentId,
   });
 
+  console.log(req.body);
+  // Check that the kid does not already exist for the parent
+  const exists = await Kid.findOne({
+    name: req.body.name,
+    parentId: req.body.parentId,
+  });
+  console.log(exists);
+  if (exists)
+    return res.status(400).json({ error: { message: 'Kid exists for parent' } });
+
   try {
     const savedKid = await kid.save();
     res.status(200).json(savedKid);
