@@ -8,10 +8,18 @@ import {
   generateJwtToken,
   refreshTokenExists,
   regenerateTokens,
-} from '../utils/encryption.js';
+} from '../utils/auth.js';
 
 const authRouter = Router();
 
+/**
+ * POST: Register
+ *
+ * Parameters
+ * name: String
+ * email: String
+ * password: String
+ */
 authRouter.post('/register', async (req, res) => {
   // Validate data
   const error = await registerValidation(req.body);
@@ -38,6 +46,25 @@ authRouter.post('/register', async (req, res) => {
   }
 });
 
+/**
+ * POST: Login
+ * 
+ * Validates user via password and email
+ * Returns a JWT Token and refresh token for authorized requests
+ * 
+ * Parameters
+ * {
+ *   email: String
+ *   password: String
+ * }
+ * 
+ * Returns
+ * {
+    status: String
+    accessToken: String
+    refreshToken: String
+  }
+ */
 authRouter.post('/login', async (req, res) => {
   // Validate data
   const error = await loginValidation(req.body);
@@ -59,6 +86,24 @@ authRouter.post('/login', async (req, res) => {
   });
 });
 
+/**
+ * POST: RefreshToken
+ * 
+ * Regenerates tokens based on valid refresh token
+ * Returns a JWT Token and refresh token for authorized requests
+ * 
+ * Parameters
+ * {
+ *   refreshToken: String
+ * }
+ * 
+ * Returns
+ * {
+    status: String
+    accessToken: String
+    refreshToken: String
+  }
+ */
 authRouter.post('/refreshToken', async (req, res) => {
   // Check that the refresh token exists
   if (!refreshTokenExists(req.body.refreshToken))
@@ -66,7 +111,7 @@ authRouter.post('/refreshToken', async (req, res) => {
 
   // Regenerate tokens
   const tokens = await regenerateTokens(req.body.refreshToken);
-  console.log('tokens',tokens);
+  console.log('tokens', tokens);
 
   if (tokens.status === 'error')
     return res
