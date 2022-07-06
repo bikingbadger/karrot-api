@@ -1,7 +1,14 @@
 import { Router } from 'express';
 import User from '../model/User.js';
 import { registerValidation, loginValidation } from '../utils/validation.js';
-import { hashValue, compareValues, jwtToken, refreshToken } from '../utils/encryption.js';
+import {
+  hashValue,
+  compareValues,
+  generateRefreshToken,
+  generateJwtToken,
+  refreshTokenExists,
+  regenerateTokens,
+} from '../utils/encryption.js';
 
 const authRouter = Router();
 
@@ -45,9 +52,32 @@ authRouter.post('/login', async (req, res) => {
   const passwordsMatch = await compareValues(req.body.password, user.password);
   if (!passwordsMatch)
     return res.status(400).json({ error: { message: 'User does not exist' } });
-  res
-    .status(200)
-    .json({ status: 'success', accessToken: jwtToken({ id: user._id }), refreshToken: refreshToken({ id: user._id }) });
+  res.status(200).json({
+    status: 'success',
+    accessToken: generateJwtToken({ id: user._id }),
+    refreshToken: generateRefreshToken({ id: user._id }),
+  });
+});
+
+authRouter.post('/refreshToken', async (req, res) => {
+  // Check that the refresh token exists
+  if (!refreshTokenExists(req.body.refreshToken))
+    return res.status(400).json({ error: { message: 'Invalid token' } });
+
+  // Regenerate tokens
+  const tokens = await regenerateTokens(req.body.refreshToken);
+  console.log('tokens',tokens);
+
+  if (tokens.status === 'error')
+    return res
+      .status(400)
+      .json({ error: { message: 'Could not generate token' } });
+
+  res.status(200).json({
+    status: 'success',
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+  });
 });
 
 export default authRouter;
