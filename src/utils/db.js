@@ -7,7 +7,7 @@ const uri = process.env.DB_CONNECT;
 const dbConnection = mongoose
   .connect(
     uri,
-    //{ useNewUrlParser: true },
+    { dbName : "Karrot" },
   )
   .then(() => {
     console.log('connected to db');
