@@ -14,7 +14,7 @@ const authRouter = Router();
 
 /**
  * POST: Register
- * 
+ *
  * Creates a new app users based on email and password
  * Email must be unique in the system
  *
@@ -84,6 +84,7 @@ authRouter.post('/login', async (req, res) => {
     return res.status(400).json({ error: { message: 'User does not exist' } });
   res.status(200).json({
     status: 'success',
+    user: { _id: user._id, name: user.name, email: user.email },
     accessToken: generateJwtToken({ id: user._id }),
     refreshToken: generateRefreshToken({ id: user._id }),
   });
