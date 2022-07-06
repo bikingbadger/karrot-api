@@ -3,6 +3,16 @@ import Kid from '../model/Kid.js';
 
 const kidRouter = new Router();
 
+/**
+ * POST: Create
+ *
+ * Creates a new kid with the parent id supplied
+ *
+ * Parameters
+ * name: String
+ * icon: String
+ * parentId: String
+ */
 kidRouter.post('/create', async (req, res) => {
   const user = req.user;
   const kidData = req.body;
@@ -10,7 +20,7 @@ kidRouter.post('/create', async (req, res) => {
   const kid = new Kid({
     name: req.body.name,
     icon: req.body.icon,
-    parentId: req.user.id,
+    parentId: req.body.parentId,
   });
 
   try {
