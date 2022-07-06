@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 // variable when hosted in the cloud
 const uri = process.env.DB_CONNECT;
 
+console.log(process.env);
+
 const dbConnection = mongoose
   .connect(
     uri,
