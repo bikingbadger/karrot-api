@@ -14,6 +14,9 @@ const authRouter = Router();
 
 /**
  * POST: Register
+ * 
+ * Creates a new app users based on email and password
+ * Email must be unique in the system
  *
  * Parameters
  * name: String
