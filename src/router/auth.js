@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import User from '../model/User.js';
 import { registerValidation, loginValidation } from '../utils/validation.js';
-import { hashValue, compareValues, jwtToken } from '../utils/encryption.js';
+import { hashValue, compareValues, jwtToken, refreshToken } from '../utils/encryption.js';
 
 const authRouter = Router();
 
@@ -43,12 +43,11 @@ authRouter.post('/login', async (req, res) => {
 
   // Check passwords match
   const passwordsMatch = await compareValues(req.body.password, user.password);
-  console.log(req.body.password, user.password, passwordsMatch);
   if (!passwordsMatch)
     return res.status(400).json({ error: { message: 'User does not exist' } });
   res
     .status(200)
-    .json({ status: 'success', token: jwtToken({ id: user._id }) });
+    .json({ status: 'success', accessToken: jwtToken({ id: user._id }), refreshToken: refreshToken({ id: user._id }) });
 });
 
 export default authRouter;

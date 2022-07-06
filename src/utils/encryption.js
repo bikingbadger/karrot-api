@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+const refreshTokens = [];
+
 const hashValue = async (inputValue) => {
   const salt = await bcrypt.genSalt(10);
   const hashValue = await bcrypt.hash(inputValue, salt);
@@ -12,7 +14,15 @@ const compareValues = async (source, target) => {
 };
 
 const jwtToken = (inputValue) => {
-  return jwt.sign(inputValue, process.env.JWT_TOKEN);
+  return jwt.sign(inputValue, process.env.JWT_TOKEN, { expiresIn: '15m' });
 };
 
-export { hashValue, compareValues, jwtToken };
+const refreshToken = (inputValue) => {
+  const token = jwt.sign(inputValue, process.env.REFRESH_TOKEN, {
+    expiresIn: '20m',
+  });
+  refreshTokens.push(token);
+  return token;
+};
+
+export { hashValue, compareValues, jwtToken, refreshToken };
