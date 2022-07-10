@@ -20,6 +20,7 @@ const registerValidation = async (data) => {
 };
 
 const loginValidation = async (data) => {
+  console.log('loginValidation',data);
   const loginSchema = Joi.object({
     email: Joi.string().email().min(6).required(),
     password: Joi.string().min(6).required(),
