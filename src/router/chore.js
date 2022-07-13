@@ -28,6 +28,15 @@ choreRouter.post('/createChore', async (req, res) => {
   }
 });
 
-choreRouter.get('/allChores', async (req, res) => {});
+choreRouter.get('/allChores', async (req, res) => {
+  console.log(req.user);
+  if (!req.user)
+    res.status(401).json({ status: 'error', message: 'Unauthorized User' });
+
+  //const parentId = req.user.id;
+  const chores = await Chore.find({});
+
+  res.status(200).json(chores);
+});
 
 export default choreRouter;
