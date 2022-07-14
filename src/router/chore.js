@@ -3,7 +3,7 @@ import Chore from '../model/Chore.js';
 
 const choreRouter = new Router();
 
-choreRouter.post('/createChore', async (req, res) => {
+choreRouter.post('/create', async (req, res) => {
   const user = req.user;
   const choreData = req.body;
 
@@ -16,7 +16,6 @@ choreRouter.post('/createChore', async (req, res) => {
   const exists = await Chore.findOne({
     name: choreData.name,
   });
-  console.log('createChore\n', exists);
   if (exists)
     return res.status(400).json({ error: { message: 'Chore exists' } });
 
