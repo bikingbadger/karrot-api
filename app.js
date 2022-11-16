@@ -7,7 +7,7 @@ import router from './src/router/index.js';
 import { dbConnection } from './src/utils/db.js';
 
 const app = express();
-const PORT = process.env.port || 3030;
+const PORT = process.env.port || 3000;
 
 // CORS setup
 const corsOptions = {
