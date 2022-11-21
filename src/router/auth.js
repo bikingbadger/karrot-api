@@ -75,6 +75,7 @@ authRouter.post('/login', async (req, res) => {
 
   // Check if email exists
   const user = await User.findOne({ email: req.body.email });
+  console.log(user);
   if (!user)
     return res.status(400).json({ error: { message: 'User does not exist' } });
 
